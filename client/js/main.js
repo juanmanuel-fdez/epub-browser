@@ -8,7 +8,7 @@
 	
 	var ebookExtensions = [".epub"];
 	
-    var extensionsMap = {
+    var                                                                                                          = {
 		".zip"	: 	"compress.png",         
 		".gz"	:	"compress.png",         
 		".bz2"	:	"compress.png",         
@@ -71,7 +71,7 @@
 	}
 	
 	function loadFiles (path){
-		var uri = "/files";
+		var uri = "../files";
 		if(path){
 			uri += "?path="+ path;
 		}
@@ -88,70 +88,103 @@
 				
 				//the first element is always a link to the parent folder except it we are on the root level
 				var parentPath = upFolder(path);
-				if(path){
-					var h = '<div class="file-item defaultPadding">';
-					h += '<div class="file-icon"><a href="'+parentPath+'" class="folder"><img src="./images/parentFolder.png" alt="Parent Folder"></a></div>';
-					h += '<div class="file-name"><a href="'+parentPath+'" class="folder">Parent Folder</a></div>';
-					h += '</div>';
+				if(path){					
+					var h = '<div class="file-item">';
+					h += '<div class="file-item-img">';
+					h += '<a href="'+parentPath+'" class="folder-link"><img src="./images/parentFolder.png" alt="Parent Folder" class="icon"></a></div>';
+					h += '<p>Parent Folder</p></div>';
 
 					grid.insertAdjacentHTML('beforeend', h);
 					
+					//creating the relative path to use it as a basis to build the url to the links and images
+					path = '/'+path+'/';
+				}else{
+					//once we check if the path is the root, we add an '/' to use the path as a basis to build the url to the links and images
+					path="/";
 				}		
+
 				
             $(data).each(function (i, file) {
 				//create the content of the new element of the grip
-				var aClass = "file-grid-img";
+				var aClass = "";
 				var icon2show = "./images/unknown.png"
 				var alt = "Unknown file";
 				var href= "";
+				var imgClass="";
 				
 				if (file.IsDirectory) {
-					//show the folder icon and remove the popup  class
-					aClass += " folder";
+					//show the folder icon and mark it as a link to a folder with a class
+					aClass += "class='folder folder-link'";
+					imgClass +="class='icon'";
 					icon2show = "./images/folder.png";
 					alt = file.Name+" Folder";
 					href= file.Path;
 				}else if(imgExtensions.indexOf(file.Ext.toLowerCase()) !=-1){
 					//show image and allow to be showed in the carrousell
-					aClass += " image-popup";
 					icon2show = "/"+file.Path;
 					alt = file.Name;
 					href= "/"+file.Path;
+				}else if(ebookExtensions.indexOf(file.Ext.toLowerCase()) !=-1){
+					//show the cover of the ebook and remove the popup  class
+					icon2show = path+".covers/"+file.Name.replace("epub", "jpg");
+					alt = file.Name;
+					href= "/"+file.Path;	
 				}else{
 					//show file icon and open it in a new window
 					var fileIcon = getFileIcon(file.Ext,file.Name);
-					
-					aClass += "";
 					icon2show = "./images/"+fileIcon;
 					alt = file.Name;
 					href= "/"+file.Path;
 				}
-				
-				var h = '<div class="file-item defaultPadding">';
-				h += '<div class="file-icon"><a href="'+href+'" class="'+aClass+'" target="_blank"><img src="'+icon2show+'" alt="'+alt+'"></a></div>';
-				h += '<div class="file-name"><a href="'+href+'" class="'+aClass+'" target="_blank">'+file.Name+'</a></div>';
+				var h = '<div class="file-item">';
+				h += '<div class="file-item-img"><a href="'+href+'" '+aClass+'><img src="'+icon2show+'" alt="'+alt+'" '+imgClass+'></a>';
 				if (!file.IsDirectory) {
-					h += '<div class="file-download"><a href="'+href+'" class="download" download><img src="./images/download.png" alt="'+alt+'"></a></div>';
+					h += '<a href="'+href+'" class="button download-btn">Download</a>';
 				}
-				h += '</div>';
+				h += '</div><p>'+file.Name+'</p></div>';
 
 				grid.insertAdjacentHTML('beforeend', h);
             });
 						
-			//update the natigation title
-			if ("undefined" == typeof path) {
-				path="";
+			//once we have printed all the icons if some cover from an epub is not showed (the reference is broken) replace them by the default icon.
+			$("div.file-item-img img").on("error", function () {
+				var epubName = $(this).attr("src");
+				console.log("Cover not found:"+epubName);
+				$(this).unbind("error").attr("src", "./images/ebook.png").attr("class","icon");
+			});
+			
+			var folderButtons = document.querySelector('#path');
+			//remove previous content of the div#file-grid
+			$('#path').empty();
+			
+			var folderNames = path.replace(/\\/g, '\/').split('\/');
+			var folderName = folderNames[folderNames.length-2];
+			
+			if(!folderName){
+				folderName ="Home";//if we are on the root folder we put the title "home"
+			}else{
+				folderButtons.insertAdjacentHTML('beforeend', '<li class="button"><a class="folder-link" href="">Home</a></li>');	//name of the current folder
 			}
-			$('.breadcrumb').text("/"+path.replace(/\\/g, '\/'));
+			$('#folderNameHeader h2').text(folderName);	
+			
+			//buttons with the complete path (you can use them as a tags to sort your books)
+			var segmentPath ="";
+			folderNames.forEach(function (folder) {
+				if(folder){
+					if(segmentPath)
+						segmentPath+="/";
+				
+					segmentPath+=folder;
+					folderButtons.insertAdjacentHTML('beforeend', '<li class="button"><a class="folder-link" href="'+segmentPath+'">'+folder+'</a></li>');
+				}
+			});
         });
 	};
 	
 	// Change folder when we select it from an icon
 	var changeFolder = function() {
-		$(document).on('click', 'a.folder', function(e){
-			e.preventDefault();
-			// replace the content for a loading icon
-			
+		$(document).on('click', 'a.folder-link', function(e){
+			e.preventDefault();			
 			//move to the destination path
 			loadFiles ($(this).attr('href'));
 		});

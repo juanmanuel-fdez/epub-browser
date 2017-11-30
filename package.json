@@ -1,21 +1,21 @@
 {
   "name": "file-browser",
-  "author": "Sumit Chawla",
+  "author": "Juan Manuel Fernandez",
   "version": "0.0.5",
   "description": "file-browser is a utility to browse files on your file system using your browser. Its equivalent of creating a file share that can be accessed over http",
   "keywords": [
-    "filebrowser",
-    "file browser",
-    "file share",
-    "fileshare"
+    "epubbrowser",
+    "epub browser",
+    "epub share",
+    "epubshare"
   ],
   "bin": {
-    "file-browser": "./index.js"
+    "epub-browser": "./index.js"
   },
-  "homepage": "https://github.com/sumitchawla/file-browser",
+  "homepage": "https://github.com/juanmanuel-fdez/epub-browser",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sumitchawla/file-browser.git"
+    "url": "https://github.com/juanmanuel-fdez/epub-browser.git"
   },
   "dependencies": {
     "express": "~4.4",
@@ -28,12 +28,12 @@
   "devDependencies": {
     "mocha": "1.20.1"
   },
-  "main": "file-browser",
+  "main": "epub-browser",
   "bugs": {
-    "url": "https://github.com/sumitchawla/file-browser/issues"
+    "url": "https://github.com/juanmanuel-fdez/epub-browser/issues"
   },
   "scripts": {
-    "test": "mocha test.js"
+	"start": "node index.js"
   },
   "license": "MIT"
 }

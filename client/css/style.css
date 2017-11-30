@@ -1,65 +1,108 @@
 @charset "UTF-8";
 
 *{
-	font-family: Verdana;
+	font-family: Helvetica;
+	margin:0;
+	padding:0;
+	color: #333;
 }
 
 body{
-	margin:0;
-	padding:0;
-	background-color:#ece8ef;
+	background-color:#fff;
 }
 
-a{
+a, a:visited{
 	text-decoration:none;
-	color:#128fd4;
+	color:#333;
 }
 
 .defaultPadding{
-	padding-left:10em;
-	padding-right:10em;
+	padding-left:5em;
+	padding-right:5em;
+}
+
+.button{
+	background-color: #bd081c;
+	border-radius: 0.25em;
+	font-weight: bold;
+	padding: 0.5em 1.25em;
+	margin-right: 0.5em;
+	color:#fff;
+}
+
+.button:hover{
+	filter: brightness(0.8);
+}
+
+a.button:visited, .button a, .button a:visited{
+	color:#fff;
+}
+
+
+
+.button-red{
+	background-color: #bd081c;
+}
+
+.red{
+	color:#bd081c;
 }
 
 /***********************************************************/
 /* header */
 /***********************************************************/
-header{
-	background-color:#00a676;
-	margin:0;
-	height:10em;
+header#mainHeader{
+	border-bottom: 1px solid #ccc;
+	padding-left: 1.5em;
+	padding-top: 0.75em;
+	padding-bottom: 0.75em;
 }
 
-header h1{
-	margin:0;
-	padding:0;
-	background-image:url('../images/logo.jpg');
-	background-repeat:no-repeat;
-	background-position:left;
-	line-height:5em;
-	padding-left:8em;
-	color: #f7f9f9;
+header#mainHeader h1{
+	background-image: url('../images/logo.png');
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: 1.25em;
+	line-height: 1.75em;
+	padding-left: 1.75em;
+	color: #434343;
+	font-size: 1.5em;
 }
 
 /***********************************************************/
 /* nav */
 /***********************************************************/
 nav{
-	margin:0;
-	line-height:2.5em;
-	font-weight: bold;
-	color: #00a676;
+	padding-top: 1.25em;
+	padding-bottom: 1.25em;
+}
+
+nav header#folderNameHeader{
+	font-size:2em;
+	padding-bottom: 0.65em;
+}
+
+nav header#folderNameHeader h2{
+	color: #555;	
+}
+
+nav ul li{
+	display: inline-block;
+	list-style:none;
 }
 
 /***********************************************************/
 /* asside tools */
 /***********************************************************/
 aside{
-	background-color:#c6e2e9;
-	margin:0;
-	line-height:2.5em;
-	display: -webkit-flex;
-	display: flex;
-	justify-content: end;
+	position:absolute;
+	top:0;
+	right:0;
+	padding-top:0.75em;
+}
+.upload-btn{
+	color: #fff;
+	cursor:pointer;
 }
 
 .progress-bar {
@@ -73,77 +116,67 @@ aside{
 	border-radius: 0.5em;
 }
 
-.upload-btn{
-	color: #128fd4;
-	cursor:pointer;
-}
-.upload-btn img{
-	height:2.5em;
-	vertical-align: middle;
-}
-
 /***********************************************************/
 /* main */
 /***********************************************************/
 
 
 /*files*/
-main div.file-item{
-	line-height: 3em;
-	display: flex;
+main#file-grid{
+	background-color:#efefef;
+	column-width: 15em;
+	column-gap: 1em;
+	padding-top:0.5em;
+	padding-bottom:0.5em;
 }
 
-main div.file-item:nth-child(even){
-	background-color:#f1f1f1;
-}
-
-main div.file-item:nth-child(odd){
-	background-color:#f7f9f9;
-}
-
-main div.file-item div{
+div.file-item{
+	position:relative;
 	display:inline-block;
+	background-color:#fff;
+	border-radius:0.5em;
+	padding: 0.5em;
+	margin-right:0.5em;
+	margin-bottom:0.25em;
+	text-align: center;
+	font-weight: bold;
+	width: 15em;
 }
 
-main div.file-item div.file-icon{
-	border-radius:100%;
-	background-color:white;
-	margin:0.25em;
-	margin-right:2em;
-	padding:0.25em;
-	width:2.5em;
-	height:2.5em;
-	line-height: initial;
+div.file-item:last{
+	margin-right:0;
 }
 
-main div.file-item div.file-icon img{
-	vertical-align:middle;
-	max-height: 2em;
-	max-width: 2em;
-	margin:auto;
+div.file-item img{
+	width:15em;
+	border-radius:0.5em;
+}
+
+div.file-item img.icon{
+	width:auto;
+}
+
+.download-btn{
+	background-color: #bd081c;
+	position:absolute;
+	top:1em;
+	right:0.5em;
+	display:none;
+	color: #fff;
+}
+
+.file-item-img:hover .download-btn{
 	display:block;
-	margin-top: 0.25em;
-	margin-bottom: 0.25em
 }
 
-main div.file-name{
-	width: calc(100% - 7.5em);
+.file-item-img:hover img{
+	opacity: 0.75;
 }
 
-main div.file-download{
-	width:2.5em;
-	float:right;
-}
-
-main div.file-download img{
-	width:2.5em;
-	vertical-align: middle;
-}
 /***********************************************************/
 /* footer */
 /***********************************************************/
 footer{
 	text-align:right;
 	padding-right:2.5em;
-	color:#128fd4;
 }

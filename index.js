@@ -10,6 +10,10 @@ var formidable = require('formidable');
 
 var program = require('commander');
 
+var ecg = require('ebook-cover-generator'); 
+
+var gm = require('gm').subClass({imageMagick: true});
+
 function collect(val, memo) {
   if(val && val.indexOf('.') != 0) val = "." + val;
   memo.push(val);
@@ -20,6 +24,7 @@ program
   .option('-p, --port <port>', 'Port to run the file-browser. Default value is 8088')
   .option('-e, --exclude <exclude>', 'File extensions to exclude. To exclude multiple extension pass -e multiple times. e.g. ( -e .js -e .cs -e .swp) ', collect, [])
   .option('-d, --directory <dir>', 'Path to the directory you want to serve. Default is current directory')
+  .option('-c, --cover', 'Create thumbnails from epub files. Default is false')
   .parse(process.argv);
 
 var app = express();
@@ -45,6 +50,15 @@ app.get('/files', function(req, res) {
 
 	var currentDir =  dir;
 	var query = req.query.path || '';
+	var ePubOptions = {
+		forceOverwrite: false,
+		overwrite: false,
+		quiet: true,
+		outputDir: '.covers',
+		outputs: [
+			{nameExtension: "", dimension: null}     // abc.cbr -> abc.jpg 
+		]	
+	};
  
 	if (query) currentDir = path.join(dir, query);
 	console.log("browsing ", currentDir);
@@ -52,7 +66,12 @@ app.get('/files', function(req, res) {
 		if (err) {
 			throw err;
 		}
-		
+
+		//create the thumbnails in case of epub ebooks
+		if(cover){ 
+			console.log("create thumbnails in: ", currentDir+ePubOptions.outputDir);
+			ecg.extractCoverGlob(currentDir+"/*.epub",ePubOptions);
+		}		
 		
 		var data = [];
 		files.filter(function (file) {

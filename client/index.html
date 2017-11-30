@@ -3,9 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>NodeJS File Browser</title>
+		<title>NodeJS epub Browser</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="File brower made in NodeJS" />
+		<meta name="description" content="epub Browser made in NodeJS" />
 		<meta name="author" content="juanmanuel-fdez (@actaw)" />
 
 		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -19,20 +19,25 @@
 		<![endif]-->
 	</head>
 	<body>
-		<header class="defaultPadding">
-			<h1>NodeJS File browser</h1>
-		</header>
-		<div id="top-container">
-			<nav class="breadcrumb defaultPadding"></nav><aside class="defaultPadding">
-				<div  class="upload-btn"><img src="./images/upload.png"> Upload Files</div>
+		<header id="mainHeader">
+			<h1>NodeJS epub Browser</h1><aside class="defaultPadding">
+				<div class="button upload-btn">Upload ePub</div>
 				<div id="dialog" title="Upload Progress">
 					<input id="upload-input" type="file" name="uploads[]" multiple="multiple" style="display:none;">
 					<div class="progress-bar" role="progressbar"></div>
 				</div>
 			</aside>
-		</div>
-		<main>
-			<div id="file-grid"></div>
+		</header>
+
+		<nav class="breadcrumb defaultPadding">
+			<header id="folderNameHeader">
+				<h2></h2>
+			</header>
+			<ul id="path"></ul>
+		</nav>
+
+		<main id="file-grid" class="defaultPadding">
+
 		</main>
 		<footer>
 			<p>&copy; Your company name</p>
