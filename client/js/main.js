@@ -1,4 +1,10 @@
 ;(function () {
+
+	/****************************************************************************************************************/
+	/* If the system is behind a proxy you have to configure the context path */
+	/****************************************************************************************************************/
+
+	var context = "/";
 	
 	/****************************************************************************************************************/
 	/* File browser fucntions */
@@ -8,7 +14,7 @@
 	
 	var ebookExtensions = [".epub"];
 	
-    var                                                                                                          = {
+    var  extensionsMap = {
 		".zip"	: 	"compress.png",         
 		".gz"	:	"compress.png",         
 		".bz2"	:	"compress.png",         
@@ -97,10 +103,10 @@
 					grid.insertAdjacentHTML('beforeend', h);
 					
 					//creating the relative path to use it as a basis to build the url to the links and images
-					path = '/'+path+'/';
+					path = context+path+'/';
 				}else{
 					//once we check if the path is the root, we add an '/' to use the path as a basis to build the url to the links and images
-					path="/";
+					path=context;
 				}		
 
 				
@@ -121,20 +127,20 @@
 					href= file.Path;
 				}else if(imgExtensions.indexOf(file.Ext.toLowerCase()) !=-1){
 					//show image and allow to be showed in the carrousell
-					icon2show = "/"+file.Path;
+					icon2show = context+file.Path;
 					alt = file.Name;
-					href= "/"+file.Path;
+					href= context+file.Path;
 				}else if(ebookExtensions.indexOf(file.Ext.toLowerCase()) !=-1){
 					//show the cover of the ebook and remove the popup  class
 					icon2show = path+".covers/"+file.Name.replace("epub", "jpg");
 					alt = file.Name;
-					href= "/"+file.Path;	
+					href= context+file.Path;	
 				}else{
 					//show file icon and open it in a new window
 					var fileIcon = getFileIcon(file.Ext,file.Name);
 					icon2show = "./images/"+fileIcon;
 					alt = file.Name;
-					href= "/"+file.Path;
+					href= context+file.Path;
 				}
 				var h = '<div class="file-item">';
 				h += '<div class="file-item-img"><a href="'+href+'" '+aClass+'><img src="'+icon2show+'" alt="'+alt+'" '+imgClass+'></a>';
@@ -157,7 +163,8 @@
 			//remove previous content of the div#file-grid
 			$('#path').empty();
 			
-			var folderNames = path.replace(/\\/g, '\/').split('\/');
+			
+			var folderNames = path.replace(context,'').replace(/\\/g, '\/').split('\/'); //remove the context from the path to hide it in the breadcrumb
 			var folderName = folderNames[folderNames.length-2];
 			
 			if(!folderName){
